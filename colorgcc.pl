@@ -114,6 +114,14 @@ sub initDefaults
   $colors{"identColor"} = color("green");
   $colors{"introColor"} = color("blue");
 
+  $colors{"otherFileNameColor"} = color("reset");
+  $colors{"otherNumberColor"}   = color("reset");
+  $colors{"otherMessageColor"}  = color("reset");
+
+  $colors{"noteFileNameColor"} = color("green");
+  $colors{"noteNumberColor"}   = color("green");
+  $colors{"noteMessageColor"}  = color("green");
+
   $colors{"warningFileNameColor"} = color("yellow");
   $colors{"warningNumberColor"}   = color("yellow");
   $colors{"warningMessageColor"}  = color("yellow");
@@ -225,39 +233,39 @@ if (! -t STDOUT || $nocolor{$terminal})
 # code and use that as our return code.
 $compiler_pid = open3('<&STDIN', \*GCCOUT, '', $compiler, @ARGV);
 
+$category = "other";
+
 # Colorize the output from the compiler.
 while(<GCCOUT>)
 {
-  if (m/^(.*?):([0-9]+(?::[0-9]+)?):(.*)$/) # filename:lineno:colno?:message
+  # filename:lineno:colno?:message
+  if (m/^(In file included from )?(.*?):([0-9]+(?::[0-9]+)?):(.*)$/)
   {
-    $field1 = $1 || "";
-    $field2 = $2 || "";
-    $field3 = $3 || "";
+    $included = $1 || "";
+    $filename = $2 || "";
+    $lineno = $3 || "";
+    $message = $4 || "";
 
-    if ($field3 =~ m/\s+warning:.*/)
-    {
-      # Warning
-      print($colors{"warningFileNameColor"}, "$field1:", color("reset"));
-      print($colors{"warningNumberColor"}, "$field2:", color("reset"));
-      srcscan($field3, $colors{"warningMessageColor"});
+    if ($message =~ m/\s+(warning|error|note):/) {
+      $category = $1;
     }
-    else
-    {
-      # Error
-      print($colors{"errorFileNameColor"}, "$field1:", color("reset"));
-      print($colors{"errorNumberColor"}, "$field2:", color("reset"));
-      srcscan($field3, $colors{"errorMessageColor"});
-    }
+
+    print($colors{"${category}MessageColor"}, "$included", color("reset"));
+    print($colors{"${category}FileNameColor"}, "$filename:", color("reset"));
+    print($colors{"${category}NumberColor"}, "$lineno:", color("reset"));
+    srcscan($message, $colors{"${category}MessageColor"});
     print("\n");
   }
   elsif (m/^(.*?):(.+):$/) # filename:message:
   {
     # No line number, treat as an "introductory" line of text.
+    $category = "other";
     srcscan($_, $colors{"introColor"});
   }
   else # Anything else.
   {
     # Doesn't seem to be a warning or an error. Print normally.
+    $category = "other";
     print(color("reset"), $_);
   }
 }
