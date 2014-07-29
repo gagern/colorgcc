@@ -115,10 +115,6 @@ sub initDefaults
   $colors{"srclineColor"} = color("cyan");
   $colors{"introColor"} = color("blue");
 
-  $colors{"otherFileNameColor"} = color("reset");
-  $colors{"otherNumberColor"}   = color("reset");
-  $colors{"otherMessageColor"}  = color("reset");
-
   $colors{"noteFileNameColor"} = color("green");
   $colors{"noteNumberColor"}   = color("green");
   $colors{"noteMessageColor"}  = color("green");
@@ -130,6 +126,10 @@ sub initDefaults
   $colors{"errorFileNameColor"} = color("bold red");
   $colors{"errorNumberColor"}   = color("bold red");
   $colors{"errorMessageColor"}  = color("bold red");
+
+  $colors{"otherFileNameColor"} = color("reset");
+  $colors{"otherNumberColor"}   = color("reset");
+  $colors{"otherMessageColor"}  = color("reset");
 }
 
 sub loadPreferences

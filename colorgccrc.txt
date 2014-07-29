@@ -44,6 +44,9 @@ srcColor: bold cyan
 # Text between ‘ and ’ is usually a source code identifier.
 identColor: green
 
+# Text starting with a space is usually source code.
+srclineColor: cyan
+
 # Text other than a warning or error.
 introFileNameColor: reset
 introMessageColor:  blue
@@ -66,3 +69,8 @@ errorMessageColor:  bold red
 noteFileNameColor: reset
 noteNumberColor:   white
 noteMessageColor:  green
+
+# Other
+otherFileNameColor: reset
+otherNumberColor:   white
+otherMessageColor:  reset
