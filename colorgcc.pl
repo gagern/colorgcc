@@ -112,6 +112,7 @@ sub initDefaults
 
   $colors{"srcColor"} = color("cyan");
   $colors{"identColor"} = color("green");
+  $colors{"srclineColor"} = color("cyan");
   $colors{"introColor"} = color("blue");
 
   $colors{"otherFileNameColor"} = color("reset");
@@ -255,6 +256,10 @@ while(<GCCOUT>)
     print($colors{"${category}NumberColor"}, "$lineno:", color("reset"));
     srcscan($message, $colors{"${category}MessageColor"});
     print("\n");
+  }
+  elsif (m/^ /) # Source line
+  {
+    print($colors{"srclineColor"}, $_);
   }
   elsif (m/^(.*?):(.+):$/) # filename:message:
   {
